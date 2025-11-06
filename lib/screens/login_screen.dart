@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Stack(
         children: [
           Image.asset(
-            'assets/fondo_login.png',
+            'assets/logo_postmatch.png',
             fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,
