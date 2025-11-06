@@ -9,7 +9,6 @@ class ReviewInfo {
   final String usuarioEmail;
   final int numLikes;
   final int numComentarios;
-  final String partidoFotoUrl;
 
   ReviewInfo({
     required this.idReview,
@@ -19,7 +18,6 @@ class ReviewInfo {
     required this.usuarioEmail,
     required this.numLikes,
     required this.numComentarios,
-    required this.partidoFotoUrl,
   });
 }
 
@@ -30,9 +28,8 @@ class ReviewsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final Color verdeOscuro3 = const Color(0xFF1C1F1E);
     final Color verdePigmentado = const Color(0xFF1F241F);
-    final Color verdeClaro = const Color(0xFF38AB3D);
 
-    // datos quemados (mock)
+    // Datos quemados (mock)
     final List<ReviewInfo> reviews = [
       ReviewInfo(
         idReview: "1",
@@ -42,8 +39,6 @@ class ReviewsScreen extends StatelessWidget {
         usuarioEmail: "carlos@example.com",
         numLikes: 23,
         numComentarios: 5,
-        partidoFotoUrl:
-            "https://upload.wikimedia.org/wikipedia/commons/5/5c/Santiago_Bernabeu_Stadium_2019.jpg",
       ),
       ReviewInfo(
         idReview: "2",
@@ -53,8 +48,6 @@ class ReviewsScreen extends StatelessWidget {
         usuarioEmail: "maria@example.com",
         numLikes: 17,
         numComentarios: 8,
-        partidoFotoUrl:
-            "https://upload.wikimedia.org/wikipedia/commons/f/fc/Camp_Nou_stadium_view.jpg",
       ),
       ReviewInfo(
         idReview: "3",
@@ -64,8 +57,34 @@ class ReviewsScreen extends StatelessWidget {
         usuarioEmail: "juan@example.com",
         numLikes: 32,
         numComentarios: 12,
-        partidoFotoUrl:
-            "https://upload.wikimedia.org/wikipedia/commons/7/7a/Etihad_Stadium_Inside_2015.jpg",
+      ),
+      ReviewInfo(
+        idReview: "4",
+        titulo: "Partido soñado para Messi",
+        descripcion: "Dos goles y una asistencia, simplemente brillante.",
+        usuarioNombre: "Lucía Gómez",
+        usuarioEmail: "lucia@example.com",
+        numLikes: 45,
+        numComentarios: 20,
+      ),
+      ReviewInfo(
+        idReview: "5",
+        titulo: "Empate con sabor a derrota",
+        descripcion:
+            "El equipo dominó pero no logró concretar sus oportunidades.",
+        usuarioNombre: "Andrés Ríos",
+        usuarioEmail: "andres@example.com",
+        numLikes: 12,
+        numComentarios: 3,
+      ),
+      ReviewInfo(
+        idReview: "6",
+        titulo: "Goleada inesperada",
+        descripcion: "Un marcador sorprendente contra todo pronóstico.",
+        usuarioNombre: "Sofía Herrera",
+        usuarioEmail: "sofia@example.com",
+        numLikes: 28,
+        numComentarios: 10,
       ),
     ];
 
@@ -88,7 +107,6 @@ class ReviewsScreen extends StatelessWidget {
                     return _reviewCard(
                       review: review,
                       background: verdePigmentado,
-                      accent: verdeClaro,
                       onLikeClick: () {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text('Like en ${review.titulo}')),
@@ -131,7 +149,6 @@ class ReviewsScreen extends StatelessWidget {
   Widget _reviewCard({
     required ReviewInfo review,
     required Color background,
-    required Color accent,
     required VoidCallback onLikeClick,
     required VoidCallback onReviewClick,
   }) {
@@ -172,10 +189,10 @@ class ReviewsScreen extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: onLikeClick,
-                      child: Icon(
+                      child: const Icon(
                         Icons.favorite_border,
                         size: 16,
-                        color: accent,
+                        color: Colors.white, // <- blanco
                       ),
                     ),
                     const SizedBox(width: 4),
@@ -184,7 +201,11 @@ class ReviewsScreen extends StatelessWidget {
                       style: const TextStyle(color: Colors.white, fontSize: 12),
                     ),
                     const SizedBox(width: 16),
-                    Icon(Icons.person, size: 16, color: accent),
+                    const Icon(
+                      Icons.person,
+                      size: 16,
+                      color: Colors.white, // <- blanco
+                    ),
                     const SizedBox(width: 4),
                     Text(
                       "${review.numComentarios}",
@@ -196,22 +217,16 @@ class ReviewsScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          // Imagen
+          // Imagen local
           GestureDetector(
             onTap: onReviewClick,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image.network(
-                review.partidoFotoUrl,
+              child: Image.asset(
+                'assets/images/fondo_estadio.png',
                 width: 120,
                 height: 80,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(
-                  color: Colors.grey.shade700,
-                  width: 120,
-                  height: 80,
-                  child: const Icon(Icons.broken_image, color: Colors.white70),
-                ),
               ),
             ),
           ),
