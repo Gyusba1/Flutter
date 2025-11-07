@@ -1,234 +1,118 @@
 import 'package:flutter/material.dart';
 
-// Modelo de datos para Partido
-class PartidoInfo {
-  final String idPartido;
-  final String local;
-  final String visitante;
-  final int golesLocal;
-  final int golesVisitante;
-  final String categoria;
-  final String partidoFotoUrl;
+class PartidoScreen extends StatefulWidget {
+  const PartidoScreen({super.key});
 
-  PartidoInfo({
-    required this.idPartido,
-    required this.local,
-    required this.visitante,
-    required this.golesLocal,
-    required this.golesVisitante,
-    required this.categoria,
-    required this.partidoFotoUrl,
-  });
+  @override
+  State<PartidoScreen> createState() => _PartidoScreenState();
 }
 
-// Estado UI del ViewModel
-class PartidosUiState {
-  final List<PartidoInfo> partidos;
-  final bool isLoading;
-
-  PartidosUiState({
-    this.partidos = const [],
-    this.isLoading = false,
-  });
-}
-
-// ViewModel
-class PartidosViewModel extends ChangeNotifier {
-  PartidosUiState _uiState = PartidosUiState(isLoading: true);
-  
-  PartidosUiState get uiState => _uiState;
-
-  PartidosViewModel() {
-    _cargarPartidos();
-  }
-
-  Future<void> _cargarPartidos() async {
-    await Future.delayed(const Duration(seconds: 1));
-    
-    _uiState = PartidosUiState(
-      isLoading: false,
-      partidos: [
-        PartidoInfo(
-          idPartido: '1',
-          local: 'Real Madrid',
-          visitante: 'Barcelona',
-          golesLocal: 3,
-          golesVisitante: 2,
-          categoria: 'La Liga',
-          partidoFotoUrl: 'https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=400',
-        ),
-        PartidoInfo(
-          idPartido: '2',
-          local: 'Manchester United',
-          visitante: 'Liverpool',
-          golesLocal: 1,
-          golesVisitante: 1,
-          categoria: 'Premier League',
-          partidoFotoUrl: 'https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?w=400',
-        ),
-        PartidoInfo(
-          idPartido: '3',
-          local: 'PSG',
-          visitante: 'Bayern Munich',
-          golesLocal: 0,
-          golesVisitante: 2,
-          categoria: 'Champions League',
-          partidoFotoUrl: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=400',
-        ),
-      ],
-    );
-    notifyListeners();
-  }
-}
-
-// Pantalla Principal
-class PartidoScreen extends StatelessWidget {
-  final PartidosViewModel viewModel;
-  final Function(String) onReviewPartidoClick;
-  final Function(String) onPartidoClick;
-  
-  // Colores definidos
+class _PartidoScreenState extends State<PartidoScreen> {
+  // 🎨 Colores
   final Color verdeOscuro = const Color(0xFF121712);
   final Color verdeOscuro2 = const Color(0xFF404F40);
   final Color verde = const Color(0xFF2B362B);
   final Color verdeClaro = const Color(0xFF38AB3D);
   final Color blancoGrisaseo = const Color(0xA9FFFFFF);
 
-  PartidoScreen({
-    Key? key,
-    required this.viewModel,
-    required this.onReviewPartidoClick,
-    required this.onPartidoClick,
-  }) : super(key: key);
+  // Lista de partidos de ejemplo
+  final List<Map<String, dynamic>> partidos = [
+    {
+      'id': '1',
+      'local': 'Real Madrid',
+      'visitante': 'Barcelona',
+      'golesLocal': 3,
+      'golesVisitante': 2,
+      'categoria': 'La Liga',
+      'foto':
+          'https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=400',
+    },
+    {
+      'id': '2',
+      'local': 'Manchester United',
+      'visitante': 'Liverpool',
+      'golesLocal': 1,
+      'golesVisitante': 1,
+      'categoria': 'Premier League',
+      'foto':
+          'https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?w=400',
+    },
+    {
+      'id': '3',
+      'local': 'PSG',
+      'visitante': 'Bayern Munich',
+      'golesLocal': 0,
+      'golesVisitante': 2,
+      'categoria': 'Champions League',
+      'foto':
+          'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=400',
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: viewModel,
-      builder: (context, child) {
-        final state = viewModel.uiState;
-
-        if (state.isLoading) {
-          return Container(
-            color: verdeOscuro,
-            child: Center(
-              child: CircularProgressIndicator(
-                color: verdeClaro,
+    return Scaffold(
+      backgroundColor: verdeOscuro,
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Header
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Partidos Destacados',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: blancoGrisaseo,
+                ),
               ),
             ),
-          );
-        }
-
-        return Container(
-          color: verdeOscuro,
-          child: Column(
-            children: [
-              // Header
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Partidos Destacados',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: blancoGrisaseo,
-                  ),
-                ),
-              ),
-              // Lista de partidos
-              Expanded(
-                child: _SectionPartidos(
-                  partidos: state.partidos,
-                  onPartidoClick: onPartidoClick,
-                  onReviewPartidoClick: onReviewPartidoClick,
-                  verdeOscuro: verdeOscuro,
-                  verdeOscuro2: verdeOscuro2,
-                  verde: verde,
-                  verdeClaro: verdeClaro,
-                  blancoGrisaseo: blancoGrisaseo,
-                ),
-              ),
-            ],
-          ),
-        );
-      },
+            // Lista de partidos
+            Expanded(child: _sectionPartidos()),
+          ],
+        ),
+      ),
     );
   }
-}
 
-// Sección de lista de partidos
-class _SectionPartidos extends StatelessWidget {
-  final List<PartidoInfo> partidos;
-  final Function(String) onPartidoClick;
-  final Function(String) onReviewPartidoClick;
-  final Color verdeOscuro;
-  final Color verdeOscuro2;
-  final Color verde;
-  final Color verdeClaro;
-  final Color blancoGrisaseo;
-
-  const _SectionPartidos({
-    required this.partidos,
-    required this.onPartidoClick,
-    required this.onReviewPartidoClick,
-    required this.verdeOscuro,
-    required this.verdeOscuro2,
-    required this.verde,
-    required this.verdeClaro,
-    required this.blancoGrisaseo,
-  });
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _sectionPartidos() {
     return ListView.builder(
       padding: const EdgeInsets.all(8),
       itemCount: partidos.length,
       itemBuilder: (context, index) {
-        return _PartidoCard(
-          partido: partidos[index],
-          onPartidoClick: onPartidoClick,
-          onPartidoReviewClick: onReviewPartidoClick,
-          verdeOscuro2: verdeOscuro2,
-          verde: verde,
-          verdeClaro: verdeClaro,
-          blancoGrisaseo: blancoGrisaseo,
+        final partido = partidos[index];
+        return _partidoCard(
+          idPartido: partido['id'],
+          local: partido['local'],
+          visitante: partido['visitante'],
+          golesLocal: partido['golesLocal'],
+          golesVisitante: partido['golesVisitante'],
+          categoria: partido['categoria'],
+          fotoUrl: partido['foto'],
         );
       },
     );
   }
-}
 
-// Card de partido individual
-class _PartidoCard extends StatelessWidget {
-  final PartidoInfo partido;
-  final Function(String) onPartidoClick;
-  final Function(String) onPartidoReviewClick;
-  final Color verdeOscuro2;
-  final Color verde;
-  final Color verdeClaro;
-  final Color blancoGrisaseo;
-
-  const _PartidoCard({
-    required this.partido,
-    required this.onPartidoClick,
-    required this.onPartidoReviewClick,
-    required this.verdeOscuro2,
-    required this.verde,
-    required this.verdeClaro,
-    required this.blancoGrisaseo,
-  });
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _partidoCard({
+    required String idPartido,
+    required String local,
+    required String visitante,
+    required int golesLocal,
+    required int golesVisitante,
+    required String categoria,
+    required String fotoUrl,
+  }) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 6),
       color: verde,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       elevation: 6,
       child: InkWell(
-        onTap: () => onPartidoClick(partido.idPartido),
+        onTap: () {
+          // Acción al hacer clic en el partido
+        },
         borderRadius: BorderRadius.circular(16),
         child: Padding(
           padding: const EdgeInsets.all(12),
@@ -238,7 +122,7 @@ class _PartidoCard extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: Image.network(
-                  partido.partidoFotoUrl,
+                  fotoUrl,
                   width: 80,
                   height: 80,
                   fit: BoxFit.cover,
@@ -254,30 +138,15 @@ class _PartidoCard extends StatelessWidget {
                       ),
                     );
                   },
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Container(
-                      width: 80,
-                      height: 80,
-                      color: verdeOscuro2,
-                      child: Center(
-                        child: CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes!
-                              : null,
-                          color: verdeClaro,
-                        ),
-                      ),
-                    );
-                  },
                 ),
               ),
               const SizedBox(height: 8),
               // Resultado del partido
-              _ResultadoPartidoCard(
-                partido: partido,
-                blancoGrisaseo: blancoGrisaseo,
+              _resultadoPartidoCard(
+                local: local,
+                visitante: visitante,
+                golesLocal: golesLocal,
+                golesVisitante: golesVisitante,
               ),
               const SizedBox(height: 8),
               // Categoría
@@ -285,7 +154,7 @@ class _PartidoCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '${partido.categoria} ⚽',
+                    '$categoria ⚽',
                     style: TextStyle(
                       color: blancoGrisaseo.withOpacity(0.8),
                       fontSize: 15,
@@ -298,7 +167,9 @@ class _PartidoCard extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () => onPartidoReviewClick(partido.idPartido),
+                  onPressed: () {
+                    // Acción de generar review
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: verdeClaro,
                     foregroundColor: Colors.white,
@@ -309,10 +180,7 @@ class _PartidoCard extends StatelessWidget {
                   ),
                   child: const Text(
                     'Generar Review',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 15,
-                    ),
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
                   ),
                 ),
               ),
@@ -322,27 +190,20 @@ class _PartidoCard extends StatelessWidget {
       ),
     );
   }
-}
 
-// Widget del resultado del partido
-class _ResultadoPartidoCard extends StatelessWidget {
-  final PartidoInfo partido;
-  final Color blancoGrisaseo;
-
-  const _ResultadoPartidoCard({
-    required this.partido,
-    required this.blancoGrisaseo,
-  });
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _resultadoPartidoCard({
+    required String local,
+    required String visitante,
+    required int golesLocal,
+    required int golesVisitante,
+  }) {
     Color colorLocal = Colors.white;
     Color colorVisitante = Colors.white;
 
-    if (partido.golesLocal > partido.golesVisitante) {
+    if (golesLocal > golesVisitante) {
       colorLocal = Colors.green;
       colorVisitante = Colors.red;
-    } else if (partido.golesLocal < partido.golesVisitante) {
+    } else if (golesLocal < golesVisitante) {
       colorLocal = Colors.red;
       colorVisitante = Colors.green;
     } else {
@@ -356,7 +217,7 @@ class _ResultadoPartidoCard extends StatelessWidget {
         Expanded(
           flex: 3,
           child: Text(
-            partido.local,
+            local,
             textAlign: TextAlign.center,
             style: TextStyle(
               color: blancoGrisaseo,
@@ -367,7 +228,7 @@ class _ResultadoPartidoCard extends StatelessWidget {
         ),
         // Goles Local
         Text(
-          '${partido.golesLocal}',
+          '$golesLocal',
           style: TextStyle(
             color: colorLocal,
             fontWeight: FontWeight.bold,
@@ -385,7 +246,7 @@ class _ResultadoPartidoCard extends StatelessWidget {
         ),
         // Goles Visitante
         Text(
-          '${partido.golesVisitante}',
+          '$golesVisitante',
           style: TextStyle(
             color: colorVisitante,
             fontWeight: FontWeight.bold,
@@ -396,7 +257,7 @@ class _ResultadoPartidoCard extends StatelessWidget {
         Expanded(
           flex: 3,
           child: Text(
-            partido.visitante,
+            visitante,
             textAlign: TextAlign.center,
             style: TextStyle(
               color: blancoGrisaseo,
@@ -406,40 +267,6 @@ class _ResultadoPartidoCard extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-// Ejemplo de uso
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Partidos',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-        scaffoldBackgroundColor: const Color(0xFF121712),
-      ),
-      home: Scaffold(
-        body: SafeArea(
-          child: PartidoScreen(
-            viewModel: PartidosViewModel(),
-            onPartidoClick: (id) {
-              debugPrint('Click en partido: $id');
-            },
-            onReviewPartidoClick: (id) {
-              debugPrint('Click en review de partido: $id');
-            },
-          ),
-        ),
-      ),
     );
   }
 }

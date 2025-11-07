@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutterpostmatch/screens/notificaciones_screen.dart';
+import 'package:flutterpostmatch/screens/partidos_screen.dart';
 import 'package:flutterpostmatch/screens/registro_screen.dart';
 import 'package:flutterpostmatch/screens/reviews_screen.dart';
 import 'package:flutterpostmatch/screens/perfil_screen.dart';
@@ -13,6 +15,6 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: PerfilScreen());
+    return const MaterialApp(home: PartidoScreen());
   }
 }

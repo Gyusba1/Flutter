@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Stack(
         children: [
           Image.asset(
-            'assets/logo_postmatch.png',
+            'assets/images/fond_login.png',
             fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,
@@ -54,20 +54,11 @@ class _LoginScreenState extends State<LoginScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _fieldLogin(
-          label: 'Usuario',
-          controller: usuarioController,
-        ),
+        _fieldLogin(label: 'Usuario', controller: usuarioController),
         const SizedBox(height: 12),
-        _fieldLogin(
-          label: 'Correo',
-          controller: correoController,
-        ),
+        _fieldLogin(label: 'Correo', controller: correoController),
         const SizedBox(height: 12),
-        _passwordField(
-          label: 'Contraseña',
-          controller: passwordController,
-        ),
+        _passwordField(label: 'Contraseña', controller: passwordController),
       ],
     );
   }
@@ -84,9 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
         labelStyle: TextStyle(color: blancoGrisaseo),
         filled: true,
         fillColor: verdeOscuro2,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: verdeClaro.withOpacity(0.5)),
           borderRadius: BorderRadius.circular(8.0),
@@ -112,9 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
         labelStyle: TextStyle(color: blancoGrisaseo),
         filled: true,
         fillColor: verdeOscuro2,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: verdeClaro.withOpacity(0.5)),
           borderRadius: BorderRadius.circular(8.0),
@@ -185,10 +172,7 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Text(
         'Al continuar, aceptas nuestros Términos de servicio y Política de privacidad',
         textAlign: TextAlign.center,
-        style: TextStyle(
-          color: blancoGrisaseo,
-          fontSize: 13,
-        ),
+        style: TextStyle(color: blancoGrisaseo, fontSize: 13),
       ),
     );
   }
