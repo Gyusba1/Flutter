@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutterpostmatch/screens/registro/bloc/registro_bloc.dart';
+import 'package:flutterpostmatch/screens/registro/bloc/registro_event.dart';
+import 'package:flutterpostmatch/screens/registro/bloc/registro_state.dart';
+import 'package:go_router/go_router.dart';
 
 class RegistroScreen extends StatefulWidget {
   const RegistroScreen({super.key});
@@ -23,57 +28,81 @@ class _RegistroScreenState extends State<RegistroScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: verdeOscuro3,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _encabezadoRegistro(context),
+    return BlocProvider(
+      create: (_) => RegistroBloc(),
+      child: BlocBuilder<RegistroBloc, RegistroState>(
+        builder: (context, state) {
+          return Scaffold(
+            backgroundColor: verdeOscuro3,
+            body: SafeArea(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    _encabezadoRegistro(context),
 
-              const SizedBox(height: 60),
+                    const SizedBox(height: 60),
 
-              _campoTexto(
-                label: "Nombre",
-                value: nombre,
-                onChanged: (v) => setState(() => nombre = v),
+                    _campoTexto(
+                      label: "Nombre",
+                      value: nombre,
+                      onChanged: (v) => {
+                        context.read<RegistroBloc>().add(UsuarioChanged(v)),
+                      },
+                    ),
+                    const SizedBox(height: 30),
+
+                    _campoTexto(
+                      label: "Email",
+                      value: email,
+                      onChanged: (v) => {
+                        context.read<RegistroBloc>().add(EmailChange(v)),
+                      },
+                    ),
+                    const SizedBox(height: 30),
+
+                    _campoTexto(
+                      label: "Contraseña",
+                      value: password,
+                      onChanged: (v) => {
+                        context.read<RegistroBloc>().add(PasswordChange(v)),
+                      },
+                      obscureText: true,
+                    ),
+                    const SizedBox(height: 30),
+
+                    _campoTexto(
+                      label: "Foto de perfil (URL)",
+                      value: fotoUrl,
+                      onChanged: (v) => {
+                        context.read<RegistroBloc>().add(
+                          FotoPerfilUrlChange(v),
+                        ),
+                      },
+                    ),
+
+                    const SizedBox(height: 10),
+
+                    if (errorMessage != null)
+                      Text(
+                        errorMessage!,
+                        style: const TextStyle(color: Colors.red),
+                      ),
+
+                    const SizedBox(height: 40),
+
+                    _botonRegistrar(() {
+                      if (state.isValid) {
+                        context.push("/reviews");
+                      }
+                    }),
+                  ],
+                ),
               ),
-              const SizedBox(height: 30),
-
-              _campoTexto(
-                label: "Email",
-                value: email,
-                onChanged: (v) => setState(() => email = v),
-              ),
-              const SizedBox(height: 30),
-
-              _campoTexto(
-                label: "Contraseña",
-                value: password,
-                onChanged: (v) => setState(() => password = v),
-                obscureText: true,
-              ),
-              const SizedBox(height: 30),
-
-              _campoTexto(
-                label: "Foto de perfil (URL)",
-                value: fotoUrl,
-                onChanged: (v) => setState(() => fotoUrl = v),
-              ),
-
-              const SizedBox(height: 10),
-
-              if (errorMessage != null)
-                Text(errorMessage!, style: const TextStyle(color: Colors.red)),
-
-              const SizedBox(height: 40),
-
-              _botonRegistrar(),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -166,7 +195,7 @@ class _RegistroScreenState extends State<RegistroScreen> {
     );
   }
 
-  Widget _botonRegistrar() {
+  Widget _botonRegistrar(Function() action) {
     return SizedBox(
       width: double.infinity,
       height: 50,
@@ -176,17 +205,7 @@ class _RegistroScreenState extends State<RegistroScreen> {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
         onPressed: () {
-          setState(() {
-            // Aquí iría la lógica del ViewModel
-            if (nombre.isEmpty || email.isEmpty || password.isEmpty) {
-              errorMessage = "Por favor completa todos los campos";
-            } else {
-              errorMessage = null;
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Usuario registrado con éxito")),
-              );
-            }
-          });
+          action();
         },
         child: const Text(
           "Registrar",

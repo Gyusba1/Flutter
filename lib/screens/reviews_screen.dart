@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterpostmatch/uiModels/Review.dart';
 import 'package:flutterpostmatch/data/local/reviews_list.dart';
+import 'package:go_router/go_router.dart';
 
 class ReviewsScreen extends StatefulWidget {
   const ReviewsScreen({super.key});
@@ -58,11 +59,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                         );
                       },
                       onReviewClick: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Abrir detalles de ${review.titulo}'),
-                          ),
-                        );
+                        context.push("/review/${review.idReview}");
                       },
                     );
                   },

@@ -99,7 +99,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 blanco: blanco,
                               ),
                               onLoginChange: () {
-                                context.push("/reviews");
+                                if (state.isValid) {
+                                  context.push("/reviews");
+                                }
                               },
                               onSingUpChange: () {
                                 context.push("/registro");

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterpostmatch/screens/notificaciones_screen.dart';
 import 'package:flutterpostmatch/screens/partidos_screen.dart';
 import 'package:flutterpostmatch/screens/registro/registro_screen.dart';
+import 'package:flutterpostmatch/screens/review_detail_screen.dart';
 import 'package:flutterpostmatch/screens/reviews_screen.dart';
 import 'package:flutterpostmatch/screens/perfil_screen.dart';
 import 'package:flutterpostmatch/screens/login/login_screen.dart';
@@ -36,8 +37,11 @@ final _router = GoRouter(
     ),
     GoRoute(
       path: "/review/:idReview",
-      builder: (context, state) => const PerfilScreen(),
-    ), // TODO: cambiar esta pantalla
+      builder: (context, state) {
+        final idReview = state.pathParameters['idReview']!;
+        return ReviewDetailScreen(idReview: idReview);
+      },
+    ),
   ],
 );
 

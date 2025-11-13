@@ -6,17 +6,39 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(LoginState()) {
     on<UsuarioChanged>((event, emit) {
       final newUsuario = event.usuario;
-      emit(state.copyWith(email: newUsuario));
+      print("usuario change: ${newUsuario}");
+      emit(
+        state.copyWith(
+          usuario: newUsuario,
+          isValid: _validate(newUsuario, state.email, state.password),
+        ),
+      );
     });
 
     on<EmailChange>((event, emit) {
       final newEmail = event.email;
-      emit(state.copyWith(email: newEmail));
+      print("email change: ${newEmail}");
+      emit(
+        state.copyWith(
+          email: newEmail,
+          isValid: _validate(state.usuario, newEmail, state.password),
+        ),
+      );
     });
 
     on<PasswordChange>((event, emit) {
       final newPassword = event.password;
-      emit(state.copyWith(password: newPassword));
+      print("password change: ${newPassword}");
+      emit(
+        state.copyWith(
+          password: newPassword,
+          isValid: _validate(state.usuario, state.email, newPassword),
+        ),
+      );
     });
+  }
+
+  bool _validate(String usuario, String email, String password) {
+    return usuario.isNotEmpty && email.isNotEmpty && password.isNotEmpty;
   }
 }
