@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutterpostmatch/screens/notificaciones_screen.dart';
+import 'package:flutterpostmatch/screens/partido_detail_screen.dart';
 import 'package:flutterpostmatch/screens/partidos_screen.dart';
 import 'package:flutterpostmatch/screens/registro/registro_screen.dart';
 import 'package:flutterpostmatch/screens/review_detail_screen.dart';
@@ -10,7 +11,7 @@ import 'package:go_router/go_router.dart';
 
 final _router = GoRouter(
   routes: [
-    GoRoute(path: "/", builder: (context, state) => const LoginScreen()),
+    GoRoute(path: "/", builder: (context, state) => const PartidosScreen()),
     GoRoute(
       path: "/reviews",
       builder: (context, state) => const ReviewsScreen(),
@@ -40,6 +41,13 @@ final _router = GoRouter(
       builder: (context, state) {
         final idReview = state.pathParameters['idReview']!;
         return ReviewDetailScreen(idReview: idReview);
+      },
+    ),
+    GoRoute(
+      path: "/partido/:idPartido",
+      builder: (context, state) {
+        final idPartido = state.pathParameters['idPartido']!;
+        return PartidoDetailScreen(idPartido: idPartido);
       },
     ),
   ],

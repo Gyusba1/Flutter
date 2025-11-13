@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterpostmatch/data/local/partidos_list.dart';
 import 'package:flutterpostmatch/uiModels/Partido.dart';
+import 'package:go_router/go_router.dart';
 
 class PartidosScreen extends StatefulWidget {
   const PartidosScreen({super.key});
@@ -29,6 +30,7 @@ class _PartidoScreenState extends State<PartidosScreen> {
   void _loadPartidos() {
     setState(() {
       partidos = partidosGlobales;
+      isLoading = false;
     });
   }
 
@@ -164,7 +166,7 @@ class PartidoCard extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
         onTap: () {
-          // Acción al hacer clic en el partido
+          context.push("/partido/${partido.idPartido}");
         },
         child: Padding(
           padding: const EdgeInsets.all(12),
