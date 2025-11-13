@@ -1,10 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:flutterpostmatch/screens/notificaciones_screen.dart';
 import 'package:flutterpostmatch/screens/partidos_screen.dart';
-import 'package:flutterpostmatch/screens/registro_screen.dart';
+import 'package:flutterpostmatch/screens/registro/registro_screen.dart';
 import 'package:flutterpostmatch/screens/reviews_screen.dart';
 import 'package:flutterpostmatch/screens/perfil_screen.dart';
-import 'package:flutterpostmatch/screens/login_screen.dart';
+import 'package:flutterpostmatch/screens/login/login_screen.dart';
+import 'package:go_router/go_router.dart';
+
+final _router = GoRouter(
+  routes: [
+    GoRoute(path: "/", builder: (context, state) => const LoginScreen()),
+    GoRoute(
+      path: "/reviews",
+      builder: (context, state) => const ReviewsScreen(),
+    ),
+    GoRoute(
+      path: "/partidos",
+      builder: (context, state) => const PartidosScreen(),
+    ),
+    GoRoute(path: "/login", builder: (context, state) => const LoginScreen()),
+    GoRoute(
+      path: "/registro",
+      builder: (context, state) => const RegistroScreen(),
+    ),
+    GoRoute(
+      path: "/notificaciones",
+      builder: (context, state) => const NotificacionesScreen(),
+    ),
+    GoRoute(
+      path: "/perfil/:idUsuario",
+      builder: (context, state) {
+        final id = state.pathParameters['idUsuario'];
+        return PerfilScreen(id: id);
+      },
+    ),
+    GoRoute(
+      path: "/review/:idReview",
+      builder: (context, state) => const PerfilScreen(),
+    ), // TODO: cambiar esta pantalla
+  ],
+);
 
 void main() {
   runApp(const MainApp());
@@ -15,6 +50,6 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: PartidoScreen());
+    return MaterialApp.router(routerConfig: _router);
   }
 }

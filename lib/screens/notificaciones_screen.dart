@@ -8,7 +8,6 @@ class NotificacionesScreen extends StatefulWidget {
 }
 
 class _NotificacionesScreenState extends State<NotificacionesScreen> {
-  // 🎨 Colores
   final Color verdeOscuro = const Color(0xFF121712);
   final Color verdeOscuro2 = const Color(0xFF404F40);
   final Color verde = const Color(0xFF2B362B);
@@ -92,9 +91,7 @@ class _NotificacionesScreenState extends State<NotificacionesScreen> {
     required String fotoPerfil,
   }) {
     return InkWell(
-      onTap: () {
-        // Acción al hacer clic en la notificación
-      },
+      onTap: () {},
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(
